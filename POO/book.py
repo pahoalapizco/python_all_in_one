@@ -4,41 +4,41 @@ class Book:
         self.author: str = author
         self.isbn: str = isbn
         self.is_available: bool = is_available
-        self.__borrowed_times: int = 0
+        self.__loan_times: int = 0
     
     def __str__(self) -> str:
         msj = "This title is" + ("" if self.is_available else " not") + " available"
         return f"Book: {self.title} \nAuthor: {self.author}. \n{msj}."
 
     @property
-    def borrow_times(self) -> int:
-        return self.__borrowed_times
+    def loan_times(self) -> int:
+        return self.__loan_times
     
-    @borrow_times.setter
-    def borrow_times(self, times: int) -> None:
-        self.__borrowed_times = times
+    @loan_times.setter
+    def loan_times(self, times: int) -> None:
+        self.__loan_times = times
     
-    def borrow(self) -> None:
+    def loan(self) -> None:
         if self.is_available:
             self.is_available = False
-            self.borrow_times += 1
+            self.loan_times += 1
         else:
             raise ValueError("Sorry this book is not available.")
     
-    def put_back(self) -> None:
+    def recive_book(self) -> None:
         if not self.is_available:
             self.is_available = True
         else:
-            raise ValueError("Sorry this book has already.")
+            raise ValueError("Sorry this book has already returned.")
 
     def is_popular(self) -> bool:
-        return self.borrow_times > 5
+        return self.loan_times > 5
 
-def borrow_book_similator(book: Book, borrow_times: int) -> None:
+def loan_book_similator(book: Book, borrow_times: int) -> None:
     for _ in range(borrow_times):
         if not book.is_available:
-            book.put_back()        
-        book.borrow()
+            book.recive_book()        
+        book.loan()
 
 if __name__ == "__main__":
     try:
@@ -52,8 +52,8 @@ if __name__ == "__main__":
             print(book, "\n")
         
         # Simular prestamo de libros:
-        borrow_book_similator(books["book1"], 6)
-        borrow_book_similator(books["book3"], 3)
+        loan_book_similator(books["book1"], 6)
+        loan_book_similator(books["book3"], 3)
         
         print(f"{books["book1"].title} is", ("" if books["book1"].is_popular() else "not") ,"popular.")
         print(f"{books["book3"].title} is", ("" if books["book3"].is_popular() else "not") ,"popular.")
