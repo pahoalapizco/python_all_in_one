@@ -1,6 +1,8 @@
 from typing import Optional
 from datetime import datetime
 
+from exeptions import BookNotAvailableError, ReturnedBookError
+
 class Book:
     def __init__(self, title: str, author: str, isbn: str, is_available: bool = True) -> None:
         self.title: str = title
@@ -43,14 +45,14 @@ class Book:
         and increase the loan_times counter.
 
         Raises:
-            ValueError: Raised an error when the book is not available to loan.
+            BookNotAvailableError: Raised an error when the book is not available to loan.
         """
         if self.is_available:
             self.is_available = False
             self.loan_times += 1
             self.__loan_date = datetime.now()
         else:
-            raise ValueError("Sorry this book is not available.")
+            raise BookNotAvailableError(f"the book is not available")
 
     def recive_book(self) -> None:
         """
@@ -58,13 +60,13 @@ class Book:
         It marks the book available and reset to None the loan date.
 
         Raises:
-            ValueError: Raised an error when the book is not available to returned.
+            ReturnedBookError: Raised an error when the book is not available to returned.
         """
         if not self.is_available:
             self.is_available = True
             self.__loan_date = None
         else:
-            raise ValueError("Sorry this book has already returned.")
+            raise ReturnedBookError("the book has already returned")
 
     def is_popular(self) -> bool:
         """_summary_

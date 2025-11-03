@@ -1,44 +1,48 @@
 from typing import Protocol
 
+from exeptions import LibraryError
+
 from book import Book
 from library import Library
-from users import Student, Professor
+from users import Student, Professor, BorrowReturningBooksProtocol
 
 ## ===========  TESTING BOOK FUNCTIONALITY =========== 
 def loan_book_similator(book: Book, borrow_times: int) -> None:
-    for _ in range(borrow_times):
-        if not book.is_available:
-            book.recive_book()        
-        book.loan()
-
-def testing_books(books: dict[Book]):
     try:
-        for (name, book) in books.items():
-            print(book, "\n")
-        
-        # Simular prestamo de libros:
-        loan_book_similator(books["book1"], 6)
-        loan_book_similator(books["book3"], 3)
-        
-        print(f"{books["book1"].title} is", ("" if books["book1"].is_popular() else "not") ,"popular.")
-        print(f"{books["book3"].title} is", ("" if books["book3"].is_popular() else "not") ,"popular.")
-    except ValueError as e:
+        for _ in range(borrow_times):
+            if not book.is_available:
+                book.recive_book()        
+            book.loan()
+    except LibraryError as e:
         print(e)
+        
+def testing_books(books: dict[Book]):
+    for (name, book) in books.items():
+        print(book, "\n")
+    
+    # Simular prestamo de libros:
+    loan_book_similator(books["book1"], 6)
+    loan_book_similator(books["book3"], 3)
+    
+    print(f"{books["book1"].title} is", ("" if books["book1"].is_popular() else "not") ,"popular.")
+    print(f"{books["book3"].title} is", ("" if books["book3"].is_popular() else "not") ,"popular.")
 
 
 ## =========== TESTING USER FUNCTIONALITY =========== 
 # Practice of Duck Typing
-class BorrowReturningBooksProtocol(Protocol):
-    def borrow_book(self, book: Book) -> str: ...
-    
-    def returning_book(self, book: Book) -> str: ... 
 
 def borrow_books_simulator(user: BorrowReturningBooksProtocol, books: list[Book]) -> None:
-    for book in books:
-        print(user.borrow_book(book))
+    try:
+        for book in books:
+            print(user.borrow_book(book))
+    except LibraryError as e:
+        print(e, type(e))
 
 def returning_simulator(user: BorrowReturningBooksProtocol, book: Book) -> None:
-    print(user.returning_book(book))
+    try:
+        print(user.returning_book(book))
+    except LibraryError as e:
+        print(e, type(e))
 
 
 def testing_users(books: dict[Book]):
@@ -52,7 +56,7 @@ def testing_users(books: dict[Book]):
     
     # Simulador de retorno de libros
     returning_simulator(prof, books["book1"])
-    borrow_books_simulator(student, [book_list[0]])
+    # borrow_books_simulator(student, [book_list[0]])
 
 def create_library(users: list[Student | Professor], books: list[Book]) -> Library:
     library = Library("The Fantastic Book Store", "123 Best Av.")
@@ -92,8 +96,11 @@ if __name__ == "__main__":
     library = create_library(users, books)
     testing_books(books)
     
-    print(library)
+    # print(library)
     for book in library.get_popular_books():
         print(f"Book: {book.title}, Author: {book.author}")
         print(f"Times loan: {book.loan_times}")
-        library.get_available_books
+        # library.get_available_books
+    
+    # Test LibraryError
+    testing_users(books)
