@@ -1,8 +1,8 @@
-from library import Library
+from typing import Protocol
+
 from book import Book
-from student import Student
-from typing import Protocol, Optional
-from professor import Professor
+from library import Library
+from users import Student, Professor
 
 ## ===========  TESTING BOOK FUNCTIONALITY =========== 
 def loan_book_similator(book: Book, borrow_times: int) -> None:

@@ -1,7 +1,5 @@
 from book import Book
-from user import User
-from student import Student
-from professor import Professor
+from users import Student, Professor
 
 
 class Library:
