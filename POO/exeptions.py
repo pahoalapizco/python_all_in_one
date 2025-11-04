@@ -6,3 +6,6 @@ class BookNotAvailableError(LibraryError):
 
 class ReturnedBookError(LibraryError):
     pass
+
+class NotFoundUserError(Exception):
+    pass

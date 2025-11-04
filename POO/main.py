@@ -44,7 +44,6 @@ def returning_simulator(user: BorrowReturningBooksProtocol, book: Book) -> None:
     except LibraryError as e:
         print(e, type(e))
 
-
 def testing_users(books: dict[Book]):
     prof = Professor("Luis Martínez", "P-123456", "Sitemas")
     student = Student("Paola Alapizco", "S-951753", "Sistemas")
@@ -92,15 +91,15 @@ if __name__ == "__main__":
     }
 
     
+    # # testing_users(books)
+    # library = create_library(users, books)
+    # testing_books(books)
+    
+    # # print(library)
+    # for book in library.get_popular_books():
+    #     print(f"Book: {book.title}, Author: {book.author}")
+    #     print(f"Times loan: {book.loan_times}")
+    #     # library.get_available_books
+    
+    # # Test LibraryError
     # testing_users(books)
-    library = create_library(users, books)
-    testing_books(books)
-    
-    # print(library)
-    for book in library.get_popular_books():
-        print(f"Book: {book.title}, Author: {book.author}")
-        print(f"Times loan: {book.loan_times}")
-        # library.get_available_books
-    
-    # Test LibraryError
-    testing_users(books)

@@ -1,5 +1,6 @@
 from book import Book
 from users import Student, Professor
+from exeptions import NotFoundUserError
 
 
 class Library:
@@ -33,6 +34,12 @@ class Library:
             user (User): Instance of a User
         """
         self.__users.append(user)
+    
+    def search_user(self, user_id: str) -> Student | Professor:
+        for user in self.users():
+            if user.ID == user_id:
+                return user
+        raise NotFoundUserError(f"User with ID {user_id} has not found.")
     
     # ====== BOOKS ====== 
     def add_book(self, book: Book) -> None:
