@@ -1,6 +1,7 @@
+from typing import Optional
 from book import Book
 from users import Student, Professor
-from exeptions import NotFoundUserError
+from exeptions import NotFoundUserError, BookNotAvailableError
 
 
 class Library:
@@ -78,5 +79,15 @@ class Library:
         ]
         return most_popular
 
+    def search_book(self, title: Optional[str] = None, isbn: Optional[str] = None) -> Book:
+        if not title and not isbn:
+            raise ValueError(f"title or isbn expected, got None in both")
+        
+        for book in self.__books:
+            if (title == book.title or isbn == book.isbn) and book.is_available:
+                return book
+        
+        raise BookNotAvailableError(f"Book not available.")
+
 if __name__ == "__main__":
-    pass 
+    pass

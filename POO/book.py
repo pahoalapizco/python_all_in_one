@@ -52,7 +52,7 @@ class Book:
             self.loan_times += 1
             self.__loan_date = datetime.now()
         else:
-            raise BookNotAvailableError(f"the book is not available")
+            raise BookNotAvailableError(f"'{self.title}' is not available.")
 
     def recive_book(self) -> None:
         """
@@ -66,7 +66,7 @@ class Book:
             self.is_available = True
             self.__loan_date = None
         else:
-            raise ReturnedBookError("the book has already returned")
+            raise ReturnedBookError(f"'{self.title}' has already returned")
 
     def is_popular(self) -> bool:
         """_summary_

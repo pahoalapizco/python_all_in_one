@@ -1,5 +1,6 @@
-from book import Book
 from typing import Protocol
+from book import Book
+from exeptions import BorrowBookError
 
 from exeptions import BookNotAvailableError, ReturnedBookError
 class BorrowReturningBooksProtocol(Protocol):
@@ -44,12 +45,13 @@ class Student(User):
             book.loan()
             self.borrowed_books.append(book)
             return f"Autorized book '{book.title}' loan."
-        else:
-            return f"Sorry! You have already had reached the limit of borrowed books. \nLimit: {self.limit_books}"
+        
+        raise BorrowBookError(f"Sorry! You have already had reached the limit of borrowed books. \nLimit: {self.limit_books}")
 
 class Professor(User):
     def __init__(self, name, ID, department):
         super().__init__(name, ID)
+        self.department = department
         self.limit_books = None
 
     def borrow_book(self, book):

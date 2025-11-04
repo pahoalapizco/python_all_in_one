@@ -9,3 +9,6 @@ class ReturnedBookError(LibraryError):
 
 class NotFoundUserError(Exception):
     pass
+
+class BorrowBookError(LibraryError):
+    pass
