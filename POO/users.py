@@ -1,4 +1,5 @@
 from typing import Protocol
+from abc import ABC, abstractmethod
 from book import Book
 from exeptions import BorrowBookError
 
@@ -8,7 +9,16 @@ class BorrowReturningBooksProtocol(Protocol):
     
     def returning_book(self, book: Book) -> str: ...
 
-class User():
+class BaseUser(ABC):
+    @abstractmethod
+    def borrow_book(self, book: Book) -> str:
+        pass
+    
+    @abstractmethod
+    def returning_book(self, book: Book) -> str:
+        pass
+
+class User(BaseUser):
     def __init__(self, name: str, user_id: str) -> None:
         self.name = name
         self.user_id = user_id
