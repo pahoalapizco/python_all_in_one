@@ -1,10 +1,11 @@
-from typing import Protocol
+import random
+from typing import Protocol, Optional
 
 from book import Book
 from library import Library
 from data import books_data, users_data
 from users import Student, Professor, BorrowReturningBooksProtocol
-from exeptions import ReturnedBookError, BookNotAvailableError, BorrowBookError
+from exeptions import ReturnedBookError, BookNotAvailableError, BorrowBookError, NotFoundUserError
 
 
 def fill_library(library: Library, users: list[Student | Professor], books: list[Book]):
@@ -83,6 +84,35 @@ def menu():
     
     return opt
 
+def get_user() -> Optional[Student | Professor]:
+    print("Please fill the next form to register a new user.")
+    name = input("Name (name, last name): ")
+    print("What type of user are you registering?")
+    print(" 1 - Professor \n 2 - Student")    
+    user_type = input("Chose and option: ")
+    
+    if user_type == "1":
+        program = input("Department: ")
+        user_id = "P"+str(random.randint(100_000, 600_000))
+    elif user_type == "2":
+        program = input("Degree program: ")
+        user_id = "S"+str(random.randint(100_000, 600_000))
+    else:
+        raise ValueError(f"Please choose between these two options: 1 - Professor, 2 - Student.")
+    
+    if not name or not program:
+        msj = (" name" if not name else "") \
+            + (" department" if not program and user_type == "1" else "") \
+            + (" degree program" if not program and user_type == "2" else "")
+        
+        raise ValueError(f"the folowing data are missed: {msj}")
+
+    user = Professor(name, user_id, program) if user_type == "1" else Student(name, user_id, program)
+    return user
+
+def get_book() -> Book:
+    pass
+
 def main():
     # Create and fill the library
     library = Library("The Fantastic Book Store", "123 Best Av.")
@@ -96,15 +126,37 @@ def main():
     while True:
         print("\n")
         opt = menu()
+        print()
         
         if opt == 1:
-            pass
+            try:
+                user = get_user()
+                library.register_user(user)
+                print(f"\nUser {user.name} has succesfully registered with and id: {user.user_id}")
+            except ValueError as e:
+                print (e)
         elif opt == 2:
-            pass
+            book = get_book()
+            library.add_book(book)
+            print(f"Book '{book.title}' has succesfully added into the library.")
         elif opt == 3:
-            pass
-        elif opt == 4:
-            pass
+            user_id = input("User ID: ")
+            try:
+                user = library.search_user(user_id)
+                print(user)
+            except NotFoundUserError as e:
+                print(e)
+        elif opt == 4:            
+            print("\nPlease tell us what book you are looking for.\n")
+            title = input("Book's title: ")
+            isbn = input("Book's isbn: ")
+            try:
+                book = library.search_book(title, isbn)
+                print(book)
+            except BookNotAvailableError as e:
+                print(e)
+            except ValueError as e:
+                print("Pleae write the book's title or isbn.")
         elif opt == 5:
             pass
         elif opt == 6:

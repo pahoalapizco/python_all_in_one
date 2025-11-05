@@ -37,8 +37,8 @@ class Library:
         self.__users.append(user)
     
     def search_user(self, user_id: str) -> Student | Professor:
-        for user in self.users():
-            if user.ID == user_id:
+        for user in self.users:
+            if user.user_id == user_id:
                 return user
         raise NotFoundUserError(f"User with ID {user_id} has not found.")
     
