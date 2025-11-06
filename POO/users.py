@@ -1,9 +1,8 @@
 from typing import Protocol
 from abc import ABC, abstractmethod
 from book import Book
-from exeptions import BorrowBookError
+from exeptions import BorrowBookError, BookNotAvailableError, ReturnedBookError
 
-from exeptions import BookNotAvailableError, ReturnedBookError
 class BorrowReturningBooksProtocol(Protocol):
     def borrow_book(self, book: Book) -> str: ...
     
@@ -22,14 +21,20 @@ class User(BaseUser):
     def __init__(self, name: str, user_id: str) -> None:
         self.name = name
         self.user_id = user_id
-        self.borrowed_books: list[Book] = []
+        self.__borrowed_books: list[Book] = []
     
     def __str__(self):
         return f"User: {self.name}, ID: {self.user_id}, borrowed books: {len(self.borrowed_books)}"
     
+    @property
+    def borrowed_books(self) -> list[Book]:
+        if len(self.__borrowed_books) == 0:
+            raise BorrowBookError(f"{self.name} has not borrowed any book yet.")
+        return self.__borrowed_books
+    
     def borrow_book(self, book: Book) -> str:
         try:
-            book.loan()
+            book.loan(self)
             self.borrowed_books.append(book)
             return f"Autorized loan of book '{book.title}'."
         except BookNotAvailableError as e:
@@ -59,7 +64,7 @@ class Student(User):
     
     def borrow_book(self, book: Book) -> str:
         if len(self.borrowed_books) < self.limit_books:
-            book.loan()
+            book.loan(self)
             self.borrowed_books.append(book)
             return f"Autorized book '{book.title}' loan."
         

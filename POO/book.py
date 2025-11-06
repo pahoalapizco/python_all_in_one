@@ -11,7 +11,7 @@ class Book:
         self.is_available: bool = is_available
         self.__loan_times: int = 0
         self.__limit_loan_days: int = 7
-        self.__loan_date: Optional[datetime] | None = None
+        self.__loan_date: Optional[datetime]= None
     
     def __str__(self) -> str:
         msj = "This title is" + ("" if self.is_available else " not") + " available"
@@ -66,7 +66,7 @@ class Book:
             self.is_available = True
             self.__loan_date = None
         else:
-            raise ReturnedBookError(f"'{self.title}' has already returned")
+            raise ReturnedBookError(f"'{self.title}' has been already returned")
 
     def is_popular(self) -> bool:
         """_summary_
