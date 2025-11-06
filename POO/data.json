@@ -1,0 +1,125 @@
+{
+    "name": "The Fantastic Book Store",
+    "books": [
+        {
+            "title": "Harry Potter y la Piedra Filosofal",
+            "author": "JK Rowling",
+            "isbn": "123456789",
+            "is_available": true,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        },
+        {
+            "title": "22/11/63",
+            "author": "Stephen King",
+            "isbn": "789456123",
+            "is_available": true,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        },
+        {
+            "title": "El Problema de los Tres Cuerpos",
+            "author": "Cixin Liu",
+            "isbn": "456123789",
+            "is_available": true,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        },
+        {
+            "title": "Deep Learning",
+            "author": "Jhon D. Keller",
+            "isbn": "15478932",
+            "is_available": true,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        },
+        {
+            "title": "Why Machines Learn",
+            "author": "Anil Ananthaswamy",
+            "isbn": "7854123694",
+            "is_available": true,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        },
+        {
+            "title": "Naked Statistics",
+            "author": "Charles Wheelan",
+            "isbn": "1597536548",
+            "is_available": false,
+            "_Book__loan_times": 0,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": null
+        }
+    ],
+    "users": [
+        {
+            "Professor": {
+                "name": "Luis Martínez",
+                "user_id": "P123456",
+                "_User__borrowed_books": [],
+                "department": "Sitemas",
+                "limit_books": null
+            }
+        },
+        {
+            "Professor": {
+                "name": "Ana Camacho",
+                "user_id": "P183456",
+                "_User__borrowed_books": [],
+                "department": "Industrial",
+                "limit_books": null
+            }
+        },
+        {
+            "Professor": {
+                "name": "Helena Romance",
+                "user_id": "P623456",
+                "_User__borrowed_books": [],
+                "department": "Humanidades",
+                "limit_books": null
+            }
+        },
+        {
+            "Student": {
+                "name": "Paola Alapizco",
+                "user_id": "S951753",
+                "_User__borrowed_books": [],
+                "degree_program": "Ing. Sistemas Computacionales",
+                "limit_books": 3
+            }
+        },
+        {
+            "Student": {
+                "name": "Jr Peréz",
+                "user_id": "S951753",
+                "_User__borrowed_books": [],
+                "degree_program": "Ing. Industrial",
+                "limit_books": 3
+            }
+        },
+        {
+            "Student": {
+                "name": "María Soto",
+                "user_id": "S951524",
+                "_User__borrowed_books": [],
+                "degree_program": "Antropología e Historia",
+                "limit_books": 3
+            }
+        },
+        {
+            "Student": {
+                "name": "Tomás Esquibel",
+                "user_id": "S964153",
+                "_User__borrowed_books": [],
+                "degree_program": "Ing. Sistemas Computacionales",
+                "limit_books": 3
+            }
+        }
+    ],
+    "saved_at": "2025-11-06T13:11:49.373466"
+}

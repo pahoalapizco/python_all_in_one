@@ -4,6 +4,7 @@ from typing import Protocol, Optional
 from book import Book
 from library import Library
 from data import books_data, users_data
+from persistence import Persistence
 from users import Student, Professor, BorrowReturningBooksProtocol
 from exeptions import ReturnedBookError, BookNotAvailableError, BorrowBookError, NotFoundUserError
 
@@ -202,6 +203,8 @@ def main():
             pass
         
         elif opt == 8:
+            persistence = Persistence()
+            persistence.save(library)
             print("Thans for visiting us, we hope to see you soon...")
             break
 
