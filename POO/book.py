@@ -21,6 +21,23 @@ class Book:
 
     @classmethod
     def from_dict(cls, book_dict: dict):
+        """Creates a Book's instance and updates `loan_times` and `loan_date` if needed.
+
+        Args:
+            book_dict (dict): Books's data, it mush follow the structure:
+            {
+                "title": "",
+                "author": "",
+                "isbn": "",
+                "is_available": "",
+                "_Book__UUID": "",
+                "_Book__loan_times": "",
+                "_Book__loan_date": ""
+            }
+
+        Returns:
+            Book: Rebuilt book.
+        """
         book = cls(
             title = book_dict["title"],
             author = book_dict["author"],

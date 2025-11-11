@@ -1,16 +1,20 @@
 import json
 from datetime import datetime
-from data import books_data
 from library import Library
 from book import Book
 from users import Student, Professor
 
-## TODO: Create a module to save and load data from Library
 class Persistence:
+    """ Saves and loads library's instance."""
     def __init__(self, file="data.json"):
         self.file = file
 
     def save(self, library: Library) -> None:
+        """ Save a whole library (including books and users) into a json file.
+
+        Args:
+            library (Library): Library's instance to save into a json file.
+        """
         data = {
             "name": library.name,
             "address": library.address,
@@ -23,6 +27,11 @@ class Persistence:
             json.dump(data, file, indent=4, ensure_ascii=False, default=lambda obj: obj.__dict__)
 
     def load(self) -> Library:
+        """Takes a JSON file with library's info that had been saved before and rebuilds it.
+
+        Returns:
+            Library: Rebuilt library from a JSON file
+        """
         with open(self.file, "r", encoding="utf-8") as file:
             data = json.load(file)
             
@@ -36,7 +45,7 @@ class Persistence:
             
             for data_user in data["users"]:
                 user_type, user_info = list(data_user.items())[0]
-                book_list = None
+                book_list = []
                 user = None
                 
                 if len(user_info["_User__borrowed_books"]) > 0:
@@ -53,8 +62,7 @@ class Persistence:
                 
                 if user:
                     library.register_user(user)
-
-                
+        
         return library
     
 if __name__ == "__main__":

@@ -11,10 +11,26 @@ class BorrowReturningBooksProtocol(Protocol):
 class BaseUser(ABC):
     @abstractmethod
     def borrow_book(self, book: Book) -> str:
+        """ Verifies and changes book's availability, then adds the book into user's borrowed books.
+
+        Args:
+            book (Book): Book to borrow
+
+        Returns:
+            str: Authorization message
+        """
         pass
     
     @abstractmethod
     def returning_book(self, book: Book) -> str:
+        """ Verifies and changes book's availability, then removes the book from user's borrowed books.
+
+        Args:
+            book (Book): Book to return
+
+        Returns:
+            str: Confirmation message
+        """
         pass
 
 class User(BaseUser):
@@ -28,6 +44,7 @@ class User(BaseUser):
     
     @property
     def borrowed_books(self) -> list[Book]:
+        """List with user's borrowed books."""
         return self.__borrowed_books
     
     def borrow_book(self, book: Book) -> str:
@@ -47,9 +64,6 @@ class User(BaseUser):
             self.borrowed_books.pop(idx)
             return f"Book '{book.title}' returned sucessfully."
 
-    def _add_books(self, books: list[str]) -> None:
-        self.__borrowed_books = books
-        
 class Student(User):
     def __init__(self, name, user_id, degree_program):
         super().__init__(name, user_id)
@@ -62,12 +76,25 @@ class Student(User):
     
     @classmethod
     def from_dict(cls, user_dict: dict, borrowed_books_list: list[Book]):
+        """Creates a Student's instance and updates its borrowed books list if needed.
+
+        Args:
+            user_dict (dict): Student's Info, it mush follow the structure: {
+                "name": "",
+                "user_id": "",
+                "degree_program": ""
+            }
+            borrowed_books_list (list[Book]): User's borrowed books
+
+        Returns:
+            Student: Rebuilt student
+        """
         student = cls(
             name = user_dict["name"],
             user_id = user_dict["user_id"],
             degree_program = user_dict["degree_program"]
         )
-        if len(user_dict["_User__borrowed_books"]) > 0:
+        if len(borrowed_books_list) > 0:
             student._User__borrowed_books = borrowed_books_list
         return student
     
@@ -91,12 +118,25 @@ class Professor(User):
 
     @classmethod
     def from_dict(cls, user_dict: dict, borrowed_books_list: list[Book]):
+        """Creates a Professor's instance and updates its borrowed books list if needed.
+
+        Args:
+            user_dict (dict): Professor's Info, it mush follow the structure: {
+                "name": "",
+                "user_id": "",
+                "degree_program": ""
+            }
+            borrowed_books_list (list[Book]): User's borrowed books
+
+        Returns:
+            Professor: Rebuilt student
+        """
         professor = cls(
             name = user_dict["name"],
             user_id = user_dict["user_id"],
             department = user_dict["department"]
         )
-        if len(user_dict["_User__borrowed_books"]) > 0:
+        if len(borrowed_books_list) > 0:
             professor._User__borrowed_books = borrowed_books_list
         return professor
     
