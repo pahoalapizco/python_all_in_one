@@ -1,10 +1,11 @@
+import uuid
 from typing import Optional
 from datetime import datetime
 
 from exeptions import BookNotAvailableError, ReturnedBookError
 
 class Book:
-    def __init__(self, title: str, author: str, isbn: str, is_available: bool = True) -> None:
+    def __init__(self, title: str, author: str, isbn: str, is_available: bool = True, ID: Optional[str] = None) -> None:
         self.title: str = title
         self.author: str = author
         self.isbn: str = isbn
@@ -12,11 +13,25 @@ class Book:
         self.__loan_times: int = 0
         self.__limit_loan_days: int = 7
         self.__loan_date: Optional[datetime]= None
+        self.__UUID = str(uuid.uuid1()) if not ID else ID
     
     def __str__(self) -> str:
         msj = "This title is" + ("" if self.is_available else " not") + " available"
-        return f"Book: {self.title} \nAuthor: {self.author}. \n{msj}."
+        return f"{self.title} by {self.author}. \nLoan times: {self.loan_times} \n{msj}."
 
+    @classmethod
+    def from_dict(cls, book_dict: dict):
+        book = cls(
+            title = book_dict["title"],
+            author = book_dict["author"],
+            isbn = book_dict["isbn"],
+            is_available = book_dict["is_available"],
+            ID = book_dict["_Book__UUID"]
+        )
+        book.loan_times = book_dict["_Book__loan_times"]
+        book.__loan_date = book_dict["_Book__loan_date"]
+        
+        return book
     ## ======== PROPERTIES ========
     @property
     def loan_times(self) -> int:        
@@ -37,7 +52,7 @@ class Book:
         """Date the book has loaned"""
         return self.__loan_date
     
-    ## ======== METHODS ========
+    ## ======== METHODS ========    
     def loan(self) -> None:
         """
         Loan a book, it's marked as unavailable (is_availble = False), 
@@ -50,7 +65,7 @@ class Book:
         if self.is_available:
             self.is_available = False
             self.loan_times += 1
-            self.__loan_date = datetime.now()
+            self.__loan_date = datetime.now().isoformat()
         else:
             raise BookNotAvailableError(f"'{self.title}' is not available.")
 
@@ -60,7 +75,7 @@ class Book:
         It marks the book available and reset to None the loan date.
 
         Raises:
-            ReturnedBookError: Raised an error when the book is not available to returned.
+            ReturnedBookError: Raised an error when the book is not available to returned. 
         """
         if not self.is_available:
             self.is_available = True
@@ -84,12 +99,21 @@ class Book:
         Returns:
             int: Number of days the user has to return the book.
         """
-        diff = datetime.now() - self.loan_date
+        diff = datetime.now() - datetime.fromisoformat(self.loan_date)
         return self.limit_loan_days - diff.days
 
 
 if __name__ == "__main__":
-    book = Book("Book1", "Paho Alapizco", "000000")
-    book.loan()
-    print("Loan date", book.loan_date)
+    book = Book.from_dict({
+            "title": "El Problema de los Tres Cuerpos",
+            "author": "Cixin Liu",
+            "isbn": "456123789",
+            "is_available": False,
+            "_Book__loan_times": 1,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": "2025-11-07T10:40:52.655156",
+            "_Book__UUID": "600cf962-bc24-11f0-9c5e-7e6a8f7333de"
+        })
+    print(book)
+    print(book.loan_date)
     print(book.duration_time())

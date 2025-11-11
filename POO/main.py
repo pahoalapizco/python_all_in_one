@@ -1,5 +1,5 @@
 import random
-from typing import Protocol, Optional
+from typing import Optional
 
 from book import Book
 from library import Library
@@ -61,14 +61,15 @@ def returning_simulator(user: BorrowReturningBooksProtocol, book: Book) -> None:
 def menu():    
     try:
         menu_list = [
-            "Register an user into the library system.",
-            "Add a book to the library.",
-            "Find a user.",
-            "Find a book.",
-            "Return a book.",
-            "Available books.",
-            "Get the most popular books.",
-            "Exit.",
+            "Register users.",
+            "Add books to the library",
+            "Find a user",
+            "Find a book",
+            "Loan a book",
+            "Return a book",
+            "Available books",
+            "Most popular books",
+            "Exit",
         ]
         
         print(" Library menu ".center(20, "="))
@@ -86,7 +87,8 @@ def menu():
     
     return opt
 
-def get_user() -> Optional[Student | Professor]:
+# Functions to: Get user's info to register and search users into the library
+def get_user_info() -> Optional[Student | Professor]:
     print("Please fill the next form to register a new user.")
     name = input("Name (name, last name): ")
     print("What type of user are you registering?")
@@ -112,7 +114,13 @@ def get_user() -> Optional[Student | Professor]:
     user = Professor(name, user_id, program) if user_type == "1" else Student(name, user_id, program)
     return user
 
-def get_book() -> Book:
+def find_user(library: Library) -> Student | Professor:
+    user_id = input("User ID: ")
+    user = library.search_user(user_id)
+    return user
+
+# Functions to: Get book's info to register and search books from the library
+def get_book_info() -> Book:
     print("Please fill the next form to add a new book.")
     title = input("Title: ")
     author = input("Author's name: ")
@@ -131,15 +139,24 @@ def get_book() -> Book:
     book = Book(title, author, isbn, is_available)
     return book
 
+def find_book(library: Library) -> Book:
+    print("\nPlease tell us what book you are looking for.\n")
+    title = input("Book's title: ")
+    isbn = None
+    if not title:
+        isbn = input("Book's isbn: ")
+    
+    book = library.search_book(title, isbn)
+    return book
 
 def main():
     # Create and fill the library
-    library = Library("The Fantastic Book Store", "123 Best Av.")
-    fill_library(library, users_data, books_data)
-    print(f"Welcome to {library.name}\n")
-    print("Available Books:")
-    for book in library.get_available_books():
-        print(f"  - {book.title} (isbn: {book.isbn})")
+    # library = Library("The Fantastic Book Store", "123 Best Av.")
+    # fill_library(library, users_data, books_data)
+    persistence = Persistence()
+    library = persistence.load() # Load data from JSON file
+    
+    print(f"Welcome to {library.name}")
     
     ## TODO: Code options' functionality
     while True:
@@ -147,62 +164,95 @@ def main():
         opt = menu()
         print()
         
-        if opt == 1:
+        if opt == 1: # register users
             try:
-                user = get_user()
+                user = get_user_info()
                 library.register_user(user)
                 print("=="*15)
                 print(f"\nUser {user.name} has successfully registered with and id: {user.user_id}")
             except ValueError as e:
                 print("⚠️", e)
-        elif opt == 2:
+        elif opt == 2: # Add books
             try:
-                book = get_book()
+                book = get_book_info()
                 library.add_book(book)                
                 print("=="*15)
                 print(f"Book '{book.title}' has successfully added into the library.")
             except ValueError as e:
                 print("⚠️", e)
-        elif opt == 3:
-            user_id = input("User ID: ")
+        elif opt == 3: # Find a user
+            print("Entró a la opción 3")
             try:
-                user = library.search_user(user_id)
+                user = find_user(library)
                 print("=="*15)
                 print(user)
             except NotFoundUserError as e:
                 print("⚠️",e)
-        elif opt == 4:            
-            print("\nPlease tell us what book you are looking for.\n")
-            title = input("Book's title: ")
-            isbn = input("Book's isbn: ")
+        elif opt == 4: # Find a book            
             try:
-                book = library.search_book(title, isbn)
+                book = find_book(library)
                 print("=="*15)
                 print(book)
             except BookNotAvailableError as e:
                 print("⚠️", e)
             except ValueError as e:
                 print("Pleae write the book's title or isbn.")
-        elif opt == 5:
+        elif opt == 5: # loan a book            
+            try:
+                # Encontrar al usuario
+                user = find_user(library)
+                # listar los libros disponibles
+                print("Available Books:")
+                for book in library.get_available_books():
+                    print(f"  - {book.title} (isbn: {book.isbn})")
+                # buscar libro (selección de libro)
+                book = find_book(library)
+                # prestar libro
+                result = user.borrow_book(book)
+                print(result)
+                print(user)
+                print(book)
+            except NotFoundUserError as e:
+                print("⚠️",e)
+            except BookNotAvailableError as e:
+                print("⚠️", e)
+            except BorrowBookError as e:
+                print(e)
+            except ValueError as e:
+                print("Pleae write the book's title or isbn.")
+        elif opt == 6:
             user_id = input("User ID: ")
             try:
                 user = library.search_user(user_id)
-                # print(f"{user.name} has the following borrowed books:")
-                for idx, book in enumerate(user.borrowed_books):
-                    print(f"    {idx+1} → {book.title} (isbn: {book.isbn})")
+                if len(user.borrowed_books) > 0:
+                    print(f"{user.name} has the following borrowed books:")
+                    for idx, book in enumerate(user.borrowed_books):
+                        print(f"    {idx+1} → {book.title} (isbn: {book.isbn})")
                 
-                idx = input("Select the book's number you want to return: ")
-                print(idx)
+                    idx = int(input("Select the book's number you want to return: "))
+                else:
+                    print(f"{user.name} does not have any borrowed book yet.")                
             except NotFoundUserError as e:
                 print("⚠️", e)
             except BorrowBookError as e:
                 print(e)
-        elif opt == 6:
-            pass
+            except ValueError as e:
+                print(f"Accepted options: 1 - {len(user.borrowed_books)}, got {idx}")
         elif opt == 7:
-            pass
-        
+                if len(library.get_available_books()) > 0:
+                    print("Available books:")
+                    for book in library.get_available_books():
+                        print(f"  - {book.title} (isbn: {book.isbn})")
+                else:
+                    print("Sorry!, There are not available books.")
         elif opt == 8:
+                if len(library.get_popular_books()) > 0:
+                    print("Most popular books:")
+                    for book in library.get_popular_books():
+                        print(f"  - {book.title} (isbn: {book.isbn})")
+                else:
+                    print("Sorry!, There are not popular books yet.")
+        elif opt == 9:
             persistence = Persistence()
             persistence.save(library)
             print("Thans for visiting us, we hope to see you soon...")

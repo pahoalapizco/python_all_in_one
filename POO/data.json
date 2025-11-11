@@ -1,5 +1,6 @@
 {
     "name": "The Fantastic Book Store",
+    "address": "123 Best Av.",
     "books": [
         {
             "title": "Harry Potter y la Piedra Filosofal",
@@ -8,7 +9,8 @@
             "is_available": true,
             "_Book__loan_times": 0,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": null,
+            "_Book__UUID": "600cf8e0-bc24-11f0-9c5e-7e6a8f7333de"
         },
         {
             "title": "22/11/63",
@@ -17,16 +19,18 @@
             "is_available": true,
             "_Book__loan_times": 0,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": null,
+            "_Book__UUID": "600cf962-bc24-11f0-9c5e-7e6a8f7333de"
         },
         {
             "title": "El Problema de los Tres Cuerpos",
             "author": "Cixin Liu",
             "isbn": "456123789",
-            "is_available": true,
+            "is_available": false,
             "_Book__loan_times": 0,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": "2025-11-07T10:40:52.655156",
+            "_Book__UUID": "600cf98a-bc24-11f0-9c5e-7e6a8f7333de"
         },
         {
             "title": "Deep Learning",
@@ -35,16 +39,18 @@
             "is_available": true,
             "_Book__loan_times": 0,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": null,
+            "_Book__UUID": "600cf9a8-bc24-11f0-9c5e-7e6a8f7333de"
         },
         {
             "title": "Why Machines Learn",
             "author": "Anil Ananthaswamy",
             "isbn": "7854123694",
-            "is_available": true,
-            "_Book__loan_times": 0,
+            "is_available": false,
+            "_Book__loan_times": 1,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": "2025-11-11T10:37:17.311894",
+            "_Book__UUID": "600cf9b2-bc24-11f0-9c5e-7e6a8f7333de"
         },
         {
             "title": "Naked Statistics",
@@ -53,7 +59,18 @@
             "is_available": false,
             "_Book__loan_times": 0,
             "_Book__limit_loan_days": 7,
-            "_Book__loan_date": null
+            "_Book__loan_date": null,
+            "_Book__UUID": "600cf9c6-bc24-11f0-9c5e-7e6a8f7333de"
+        },
+        {
+            "title": "El último secreto",
+            "author": "Dan Brown",
+            "isbn": "344634542",
+            "is_available": false,
+            "_Book__loan_times": 1,
+            "_Book__limit_loan_days": 7,
+            "_Book__loan_date": "2025-11-11T10:36:42.917588",
+            "_Book__UUID": "3cbc17de-bf2d-11f0-a512-7e6a8f7333de"
         }
     ],
     "users": [
@@ -115,11 +132,52 @@
             "Student": {
                 "name": "Tomás Esquibel",
                 "user_id": "S964153",
-                "_User__borrowed_books": [],
+                "_User__borrowed_books": [
+                    {
+                        "title": "22/11/63",
+                        "author": "Stephen King",
+                        "isbn": "789456123",
+                        "is_available": true,
+                        "_Book__loan_times": 0,
+                        "_Book__limit_loan_days": 7,
+                        "_Book__loan_date": null,
+                        "_Book__UUID": "600cf962-bc24-11f0-9c5e-7e6a8f7333de"
+                    }
+                ],
                 "degree_program": "Ing. Sistemas Computacionales",
                 "limit_books": 3
             }
+        },
+        {
+            "Professor": {
+                "name": "Emelyn Paola",
+                "user_id": "P392723",
+                "_User__borrowed_books": [
+                    {
+                        "title": "El último secreto",
+                        "author": "Dan Brown",
+                        "isbn": "344634542",
+                        "is_available": false,
+                        "_Book__loan_times": 1,
+                        "_Book__limit_loan_days": 7,
+                        "_Book__loan_date": "2025-11-11T10:36:42.917588",
+                        "_Book__UUID": "3cbc17de-bf2d-11f0-a512-7e6a8f7333de"
+                    },
+                    {
+                        "title": "Why Machines Learn",
+                        "author": "Anil Ananthaswamy",
+                        "isbn": "7854123694",
+                        "is_available": false,
+                        "_Book__loan_times": 1,
+                        "_Book__limit_loan_days": 7,
+                        "_Book__loan_date": "2025-11-11T10:37:17.311894",
+                        "_Book__UUID": "600cf9b2-bc24-11f0-9c5e-7e6a8f7333de"
+                    }
+                ],
+                "department": "Inteligencia Artificial",
+                "limit_books": null
+            }
         }
     ],
-    "saved_at": "2025-11-06T13:11:49.373466"
+    "saved_at": "2025-11-11T10:37:47.749053"
 }

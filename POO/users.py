@@ -28,17 +28,12 @@ class User(BaseUser):
     
     @property
     def borrowed_books(self) -> list[Book]:
-        if len(self.__borrowed_books) == 0:
-            raise BorrowBookError(f"{self.name} has not borrowed any book yet.")
         return self.__borrowed_books
     
     def borrow_book(self, book: Book) -> str:
-        try:
-            book.loan(self)
-            self.borrowed_books.append(book)
-            return f"Autorized loan of book '{book.title}'."
-        except BookNotAvailableError as e:
-            return e
+        book.loan()
+        self.borrowed_books.append(book)
+        return f"Autorized loan of book '{book.title}'."
 
     def returning_book(self, book: Book) -> str:
         if self.borrowed_books.count(book) == 0:
@@ -52,6 +47,9 @@ class User(BaseUser):
             self.borrowed_books.pop(idx)
             return f"Book '{book.title}' returned sucessfully."
 
+    def _add_books(self, books: list[str]) -> None:
+        self.__borrowed_books = books
+        
 class Student(User):
     def __init__(self, name, user_id, degree_program):
         super().__init__(name, user_id)
@@ -62,9 +60,20 @@ class Student(User):
         return f"Student: {self.name}\nID: {self.user_id}\n" \
             + f"Deegre program: {self.degree_program}\nBorrowed books: {len(self.borrowed_books)}"
     
+    @classmethod
+    def from_dict(cls, user_dict: dict, borrowed_books_list: list[Book]):
+        student = cls(
+            name = user_dict["name"],
+            user_id = user_dict["user_id"],
+            degree_program = user_dict["degree_program"]
+        )
+        if len(user_dict["_User__borrowed_books"]) > 0:
+            student._User__borrowed_books = borrowed_books_list
+        return student
+    
     def borrow_book(self, book: Book) -> str:
         if len(self.borrowed_books) < self.limit_books:
-            book.loan(self)
+            book.loan()
             self.borrowed_books.append(book)
             return f"Autorized book '{book.title}' loan."
         
@@ -80,6 +89,17 @@ class Professor(User):
             return f"Professor: {self.name}\nID: {self.user_id}\n" \
                 + f"Deparment: {self.department}\nBorrowed books: {len(self.borrowed_books)}"
 
+    @classmethod
+    def from_dict(cls, user_dict: dict, borrowed_books_list: list[Book]):
+        professor = cls(
+            name = user_dict["name"],
+            user_id = user_dict["user_id"],
+            department = user_dict["department"]
+        )
+        if len(user_dict["_User__borrowed_books"]) > 0:
+            professor._User__borrowed_books = borrowed_books_list
+        return professor
+    
     def borrow_book(self, book):
         return super().borrow_book(book)
 
