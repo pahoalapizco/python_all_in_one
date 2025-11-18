@@ -10,7 +10,7 @@ books_data: list[Book] = [
     # Science
     Book("Deep Learning", "Jhon D. Keller", "15478932"),
     Book("Why Machines Learn", "Anil Ananthaswamy", "7854123694"),
-    Book("Naked Statistics", "Charles Wheelan", "1597536548", False)
+    Book("Naked Statistics", "Charles Wheelan", "1597536548", False),
 ]
 
 users_data: list[Student | Professor] = [
