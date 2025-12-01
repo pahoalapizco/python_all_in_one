@@ -6,6 +6,7 @@ Fuente principal de cursos: [Platzi](http://www.platzi.com)
 
 **Índice**
 - [1. Python Orientado a Objetos (POO)](./POO/README.md)
+- [2. Entornos virtuales, PEP8 y Manejo de Errores](./virtual_envs/READ.md)
 
 
 
