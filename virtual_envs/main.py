@@ -1,23 +1,22 @@
 import json
-import sys
 import urllib.error
 import urllib.parse
 import urllib.request  # configuración para hacer requests a apis
+from typing import Any
 
-sys.stdout.reconfigure(encoding="utf-8")
-
-API_KEY = ""
+API_KEY = "53dce0d5403546998c350e61acc8e876"
 BASE_URL = "https://newsapi.org/v2/everything"
 
 
-def news_client(api_key: str, query: str, timeout: int = 30, retries: int = 3):
+def news_client(api_key: str, query: str, timeout: int = 30, retries: int = 3) -> dict:
     query_string = urllib.parse.urlencode({"q": query, "apiKey": api_key})
     url = f"{BASE_URL}?{query_string}"
+    resp: dict = dict()
     try:
         with urllib.request.urlopen(url, timeout=timeout) as response:
             data = response.read().decode("utf-8")
             print(f"NewsAPI: {query} con timeout {timeout}")
-            return json.loads(data)
+            resp = json.loads(data)
 
     except urllib.error.HTTPError as e:
         print(f"Error HTTP: {e.code} - {e.reason}")
@@ -25,19 +24,22 @@ def news_client(api_key: str, query: str, timeout: int = 30, retries: int = 3):
         print(f"Error de conexión/URL: {e.reason}")
     except Exception as e:
         print(f"Error inesperado: {e}")
+    finally:
+        return resp
 
 
-def guardian_client():
+def guardian_client() -> Any:
     pass
 
 
-def fetch_news(api_name, *args, **kargs):
-    base_config = {"timeout": 30, "retries": 3}
-    config = {**base_config, **kargs}
+def fetch_news(api_name: str, *args: Any, **kargs: Any) -> dict[str, Any]:
+    base_config: dict[str, int] = {"timeout": 30, "retries": 3}
+    config: Any = {**base_config, **kargs}
 
-    api_clients = {"newsapi": news_client, "guardian": guardian_client}
+    api_clients: dict[str, Any] = {"newsapi": news_client, "guardian": guardian_client}
     client = api_clients[api_name]
-    return client(*args, **config)
+    resp = client(*args, **config)
+    return resp
 
 
 if __name__ == "__main__":
