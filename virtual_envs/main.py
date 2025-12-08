@@ -4,7 +4,7 @@ import urllib.parse
 import urllib.request  # configuración para hacer requests a apis
 from typing import Any
 
-API_KEY = "53dce0d5403546998c350e61acc8e876"
+API_KEY = ""
 BASE_URL = "https://newsapi.org/v2/everything"
 
 
