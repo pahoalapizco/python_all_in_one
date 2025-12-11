@@ -20,12 +20,19 @@ def validate_api_key(api_key: str) -> bool:
     return len(api_key) > 10 and api_key.isalnum()
 
 
-def news_client(api_key: str, query: str, timeout: int = 30, retries: int = 3) -> dict:
+def news_client(
+    api_key: str,
+    query: str,
+    lang: str = "",
+    timeout: int = 30,
+    retries: int = 3,
+) -> dict:
     """Llamada a la API de news api
 
     Args:
         api_key (str): Api key requerida para la API de news api,
         query (str): Término de la busquéda
+        lang (str): Idioma, si el valor es None el resultado seran noticias en los idiomas disponibles.
         timeout (int, optional): Tiempo máximo de respuesta. Defaults to 30.
         retries (int, optional): Número de reintentos en caso de fallo. Defaults to 3.
 
@@ -43,7 +50,10 @@ def news_client(api_key: str, query: str, timeout: int = 30, retries: int = 3) -
     if not validate_api_key(api_key):
         raise APIKeyError("API_KEY no tiene el formato correcto.")
 
-    query_string = urllib.parse.urlencode({"q": query, "apiKey": api_key})
+    query_string = urllib.parse.urlencode(
+        {"q": query, "apiKey": api_key, "language": lang}
+    )
+    print("query_string ->", query_string)
     url = f"{BASE_URL}?{query_string}"
     resp: dict = dict()
     try:
@@ -76,8 +86,7 @@ def fetch_news(api_name: str, *args: Any, **kargs: Any) -> dict[str, Any]:
 
     api_clients: dict[str, Any] = {"newsapi": news_client}
     client = api_clients[api_name]
-    resp = client(*args, **config)
-    return resp
+    return client(*args, **config)
 
 
 if __name__ == "__main__":
